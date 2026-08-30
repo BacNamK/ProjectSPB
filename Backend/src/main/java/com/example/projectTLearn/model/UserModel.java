@@ -49,11 +49,11 @@ public class UserModel {
 
     private String password_hash;
 
-    public String getPassword_hash() {
+    public String getPasswordHash() {
         return password_hash;
     }
 
-    public void setPassword_hash(String password_hash) {
+    public void setPasswordHash(String password_hash) {
         this.password_hash = password_hash;
     }
 
@@ -65,6 +65,30 @@ public class UserModel {
 
     public void setFull_name(String full_name) {
         this.full_name = full_name;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Stautus getStautus() {
+        return stautus;
+    }
+
+    public void setStautus(Stautus stautus) {
+        this.stautus = stautus;
     }
 
     public enum Gender {
