@@ -35,12 +35,6 @@ public class AuthController {
                 "studentCode", ((com.example.projectTLearn.model.StudentModel) user).getStudentCode()));
     }
 
-    @PostMapping("/add-10")
-    public ResponseEntity<?> addTenUsers() {
-        String result = authService.addTenDemoUsers();
-        return ResponseEntity.ok(Map.of("message", result));
-    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 

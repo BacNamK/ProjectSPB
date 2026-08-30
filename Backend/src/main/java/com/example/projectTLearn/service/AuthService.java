@@ -3,8 +3,6 @@ package com.example.projectTLearn.service;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,51 +106,6 @@ public class AuthService {
         student.setGpa(BigDecimal.valueOf(0.00));
 
         return authRepository.save(student);
-    }
-
-    public String addTenDemoUsers() {
-        String[] names = {
-                "Nguyen Van An",
-                "Tran Thi Bich",
-                "Le Van Cuong",
-                "Pham Thi Duyen",
-                "Hoang Minh Em",
-                "Vo Thanh F",
-                "Doan Thi Giao",
-                "Bui Van Huy",
-                "Nguyen Thi Lan",
-                "Truong Minh Nam"
-        };
-
-        List<StudentModel> students = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            String code = "SV" + String.format("%03d", i + 1);
-            if (authRepository.findByStudentCode(code) != null) {
-                continue;
-            }
-
-            StudentModel student = new StudentModel();
-            student.setStudentCode(code);
-            student.setName(names[i]);
-            student.setFull_name(names[i]);
-            student.setPasswordHash(passwordEncoder.encode("123456"));
-            student.setPhone("0900000" + (i + 100));
-            student.setRole(UserModel.Role.STUDENT);
-            student.setStautus(UserModel.Stautus.ACTIVE);
-            student.setGender(i % 2 == 0 ? UserModel.Gender.MALE : UserModel.Gender.FEMALE);
-            student.setClassId(1);
-            student.setEnrollmentYear(LocalDate.now().getYear());
-            student.setGpa(BigDecimal.valueOf(3.00 + (i * 0.05)));
-            students.add(student);
-        }
-
-        if (students.isEmpty()) {
-            return "10 users already exist in database.";
-        }
-
-        authRepository.saveAll(students);
-        return "Inserted " + students.size() + " users into database.";
     }
 
     public String ComfirmToken(String token) {
