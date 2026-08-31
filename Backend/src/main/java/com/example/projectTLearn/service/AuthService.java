@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.projectTLearn.Type.RegisterRequest;
+import com.example.projectTLearn.Type.TokenResponse;
 import com.example.projectTLearn.config.JwtTokenProvider;
 import com.example.projectTLearn.exception.InvalidCredentialsException;
 import com.example.projectTLearn.exception.JwtException;
@@ -59,20 +60,22 @@ public class AuthService {
         return user;
     }
 
-    public String endCodeJwtAndCreateSession(Long userId) {
+    public TokenResponse endCodeJwtAndCreateSession(Long userId) {
 
-        int SESSION_EXPIRED = 30 * 24 * 60 * 60;
+        long SESSION_EXPIRED = 60L * 24 * 60 * 60 * 1000;
 
         UserModel user_id = authRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("USER_NOT_FOUND"));
 
-        String refreshToken = jwt.generateToken(String.valueOf(userId));
+        String accessToken = jwt.generateAccessToken(String.valueOf(userId));
+
+        String refreshToken = jwt.generateRefreshToken(String.valueOf(userId));
 
         SessionModel session = new SessionModel(user_id, refreshToken,
-                new Date(System.currentTimeMillis() + SESSION_EXPIRED * 1000L));
+                new Date(System.currentTimeMillis() + SESSION_EXPIRED));
         sessionRepository.save(session);
 
-        return refreshToken;
+        return new TokenResponse(accessToken, refreshToken);
     }
 
     public UserModel registerUser(RegisterRequest request) {
@@ -108,30 +111,39 @@ public class AuthService {
         return authRepository.save(student);
     }
 
-    public String ComfirmToken(String token) {
+    public String refreshToken(String refreshToken) {
 
-        boolean verify = jwt.validateToken(token);
+        if (refreshToken.trim().isEmpty()) {
+            throw new JwtException("TOKEN_INVALID-1!");
+        }
 
-        if (!verify) {
-            throw new JwtException("TOKEN_INVALID!");
+        String authorization = refreshToken.trim();
+        if (!authorization.regionMatches(true, 0, "Bearer ", 0, 7)) {
+            throw new JwtException("TOKEN_INVALID-1!");
+        }
+
+        String token = authorization.substring(7).trim();
+
+        if (jwt.validateRefreshToken(token) == false) {
+            throw new JwtException("TOKEN_INVALID-2!");
         }
 
         String userIdFromJwt = jwt.getUserFromJWT(token);
 
         if (userIdFromJwt == null || userIdFromJwt.trim().isEmpty()) {
-            throw new JwtException("TOKEN_INVALID!");
+            throw new JwtException("TOKEN_INVALID-3!");
         }
 
         Long userId;
         try {
             userId = Long.parseLong(userIdFromJwt);
         } catch (NumberFormatException e) {
-            throw new JwtException("TOKEN_INVALID!");
+            throw new JwtException("TOKEN_INVALID-4!");
         }
 
         authRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("USER_NOT_FOUND"));
 
-        return jwt.generateToken(String.valueOf(userId));
+        return jwt.generateAccessToken(String.valueOf(userId));
     }
 }

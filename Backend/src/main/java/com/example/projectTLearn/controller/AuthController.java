@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.projectTLearn.Type.LoginRequest;
 import com.example.projectTLearn.Type.RegisterRequest;
+import com.example.projectTLearn.Type.TokenResponse;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.service.AuthService;
 
@@ -40,16 +41,17 @@ public class AuthController {
 
         UserModel user = authService.verifyUser(request.getStudentCode(), request.getPassWord());
 
-        String token = authService.endCodeJwtAndCreateSession(user.getId());
+        TokenResponse tokenResponse = authService.endCodeJwtAndCreateSession(user.getId());
 
         return ResponseEntity.ok(Map.of(
                 "message", "Login success",
                 "user", user.getName(),
-                "token", token));
+                "accessToken", tokenResponse.getAccessToken(),
+                "refreshToken", tokenResponse.getRefreshToken()));
     }
 
     @GetMapping("/refresh")
-    public String refreshToken(@RequestHeader String token) {
-        return authService.ComfirmToken(token);
+    public ResponseEntity<?> refreshToken(@RequestHeader("Authorization") String refreshToken) {
+        return ResponseEntity.ok(Map.of("accessToken", authService.refreshToken(refreshToken)));
     }
 }
