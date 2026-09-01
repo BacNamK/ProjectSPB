@@ -1,6 +1,7 @@
 package com.example.projectTLearn.model;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -110,7 +111,12 @@ public class UserModel {
     }
 
     public enum Role {
-        STUDENT, LETURER, MODERATOR, ADMIN
+        STUDENT, LETURER, MODERATOR, ADMIN;
+
+        public Optional<UserModel> stream() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'stream'");
+        }
     }
 
     @Enumerated(EnumType.STRING)

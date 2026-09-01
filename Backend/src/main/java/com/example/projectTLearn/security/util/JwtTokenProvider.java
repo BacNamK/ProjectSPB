@@ -1,4 +1,4 @@
-package com.example.projectTLearn.config;
+package com.example.projectTLearn.security.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -100,6 +100,24 @@ public class JwtTokenProvider {
             return "REFRESH".equals(claims.get("tokenType", String.class));
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public Date getDateInToken(String token) {
+        if (token == null || token.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token.trim())
+                    .getPayload();
+
+            return claims.getExpiration();
+        } catch (Exception e) {
+            return null;
         }
     }
 }

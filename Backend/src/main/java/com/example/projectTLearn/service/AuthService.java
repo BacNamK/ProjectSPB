@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectTLearn.Type.RegisterRequest;
 import com.example.projectTLearn.Type.TokenResponse;
-import com.example.projectTLearn.config.JwtTokenProvider;
 import com.example.projectTLearn.exception.InvalidCredentialsException;
 import com.example.projectTLearn.exception.JwtException;
 import com.example.projectTLearn.exception.UserNotFoundException;
@@ -19,6 +18,7 @@ import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.AuthRepository;
 import com.example.projectTLearn.repository.SessionRepository;
+import com.example.projectTLearn.security.util.JwtTokenProvider;
 
 @Service
 public class AuthService {
@@ -114,7 +114,7 @@ public class AuthService {
     public String refreshToken(String refreshToken) {
 
         if (refreshToken.trim().isEmpty()) {
-            throw new JwtException("TOKEN_INVALID-1!");
+            throw new JwtException("TOKEN_EMPTY!");
         }
 
         String authorization = refreshToken.trim();
@@ -130,7 +130,7 @@ public class AuthService {
 
         String userIdFromJwt = jwt.getUserFromJWT(token);
 
-        if (userIdFromJwt == null || userIdFromJwt.trim().isEmpty()) {
+        if (userIdFromJwt == null || userIdFromJwt.isBlank()) {
             throw new JwtException("TOKEN_INVALID-3!");
         }
 
