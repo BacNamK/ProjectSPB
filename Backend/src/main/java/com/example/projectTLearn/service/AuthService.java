@@ -18,7 +18,7 @@ import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.AuthRepository;
 import com.example.projectTLearn.repository.SessionRepository;
-import com.example.projectTLearn.security.util.JwtTokenProvider;
+import com.example.projectTLearn.util.JwtTokenProvider;
 
 @Service
 public class AuthService {

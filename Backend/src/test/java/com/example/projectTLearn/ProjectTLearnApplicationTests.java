@@ -14,7 +14,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.example.projectTLearn.repository.AuthRepository;
 import com.example.projectTLearn.security.filter.JwtAuthenticationFilter;
-import com.example.projectTLearn.security.util.JwtTokenProvider;
+import com.example.projectTLearn.util.JwtTokenProvider;
 
 @SpringBootTest
 class ProjectTLearnApplicationTests {

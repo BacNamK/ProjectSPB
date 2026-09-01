@@ -13,7 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.AuthRepository;
-import com.example.projectTLearn.security.util.JwtTokenProvider;
+import com.example.projectTLearn.util.JwtTokenProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

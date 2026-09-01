@@ -7,6 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -28,6 +30,7 @@ public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
+    @JsonIgnore
     private Long id;
 
     public long getId() {
@@ -48,14 +51,15 @@ public class UserModel {
         this.name = name;
     }
 
-    private String password_hash;
+    @JsonIgnore
+    private String passwordHash;
 
     public String getPasswordHash() {
-        return password_hash;
+        return passwordHash;
     }
 
-    public void setPasswordHash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     private String full_name;
@@ -142,11 +146,11 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(Long id, String name, String password_hash, String full_name, Gender gender, String phone,
+    public UserModel(Long id, String name, String passwordHash, String full_name, Gender gender, String phone,
             Role role, Stautus stautus, LocalDateTime crated_at, LocalDateTime updated_at) {
         this.id = id;
         this.name = name;
-        this.password_hash = password_hash;
+        this.passwordHash = passwordHash;
         this.full_name = full_name;
         this.gender = gender;
         this.phone = phone;

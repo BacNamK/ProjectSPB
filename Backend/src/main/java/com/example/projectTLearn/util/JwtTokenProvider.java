@@ -1,4 +1,4 @@
-package com.example.projectTLearn.security.util;
+package com.example.projectTLearn.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
