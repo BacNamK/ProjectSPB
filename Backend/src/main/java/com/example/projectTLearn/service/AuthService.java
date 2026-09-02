@@ -35,17 +35,27 @@ public class AuthService {
     @Autowired
     private JwtTokenProvider jwt;
 
-    public UserModel verifyUser(String studentCode, String password) {
+    public UserModel verifyUser(String code, String password) {
 
-        if (studentCode == null || studentCode.trim().isEmpty()) {
-            throw new InvalidCredentialsException("STUDENT_CODE_NOT_EMPTY!");
+        if (code == null || code.trim().isEmpty()) {
+            throw new InvalidCredentialsException("USER_CODE_NOT_EMPTY!");
         }
 
         if (password == null || password.trim().isEmpty()) {
             throw new InvalidCredentialsException("PASSWORD_NOT_EMPTY");
         }
 
-        UserModel user = authRepository.findByStudentCode(studentCode);
+        UserModel user;
+
+        if (code.startsWith("AD")) {
+            user = authRepository.findByCode(code);
+        } else if (code.startsWith("SV")) {
+            user = authRepository.findByStudentCode(code);
+        } else if (code.startsWith("MD")) {
+            user = authRepository.findByModeratorCode(code);
+        } else {
+            throw new InvalidCredentialsException("USER_CODE_INVALID");
+        }
 
         if (user == null) {
             throw new UserNotFoundException("USER_NOT_FOUND");

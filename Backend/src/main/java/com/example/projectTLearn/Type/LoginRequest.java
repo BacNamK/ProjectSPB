@@ -2,14 +2,14 @@ package com.example.projectTLearn.Type;
 
 public class LoginRequest {
 
-    private String studentCode;
+    private String code;
 
-    public String getStudentCode() {
-        return studentCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
+    public void setCode(String studentCode) {
+        this.code = studentCode;
     }
 
     private String passWord;
@@ -25,8 +25,8 @@ public class LoginRequest {
     public LoginRequest() {
     }
 
-    public LoginRequest(String studentCode, String passWord) {
-        this.studentCode = studentCode;
+    public LoginRequest(String code, String passWord) {
+        this.code = code;
         this.passWord = passWord;
     }
 

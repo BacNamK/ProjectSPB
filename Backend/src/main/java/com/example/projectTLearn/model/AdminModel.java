@@ -2,6 +2,7 @@ package com.example.projectTLearn.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -10,9 +11,20 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "admins")
-@PrimaryKeyJoinColumn(name = "user_id")
+@PrimaryKeyJoinColumn(name = "id")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AdminModel extends UserModel {
+    @Column(name = "admin_code", length = 50, unique = true)
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     private boolean super_admin;
 
     public boolean isSuper_admin() {

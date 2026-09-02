@@ -3,7 +3,9 @@ package com.example.projectTLearn.service;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
+import tools.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,11 @@ import com.example.projectTLearn.repository.StudentRepository;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final ObjectMapper objectMapper;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, ObjectMapper objectMapper) {
         this.studentRepository = studentRepository;
+        this.objectMapper = objectMapper;
     }
 
     public PageResponse<StudentModel> getAllStudents(Integer page, Integer size) {
@@ -70,5 +74,44 @@ public class StudentService {
         } else {
             return "Student with code " + code + " not found.";
         }
+    }
+
+    public String updateStudentByStudentCode(String code, Map<String, Object> fields) {
+        if (fields == null || fields.isEmpty()) {
+            throw new IllegalArgumentException("Body phải chứa ít nhất một field");
+        }
+
+        StudentModel student = studentRepository.findStudentByStudentCode(code);
+        if (student == null) {
+            return "Student with code " + code + " not found.";
+        }
+
+        for (Map.Entry<String, Object> entry : fields.entrySet()) {
+            updateField(student, entry.getKey(), entry.getValue());
+        }
+
+        studentRepository.save(student);
+        return "Student with code " + code + " has been updated.";
+    }
+
+    private void updateField(StudentModel student, String field, Object value) {
+        String normalizedField = field == null ? "" : field.trim();
+
+        switch (normalizedField) {
+            case "name" -> student.setName(convert(value, String.class));
+            case "full_name", "fullName" -> student.setFull_name(convert(value, String.class));
+            case "gender" -> student.setGender(convert(value, StudentModel.Gender.class));
+            case "phone" -> student.setPhone(convert(value, String.class));
+            case "role" -> student.setRole(convert(value, StudentModel.Role.class));
+            case "status", "stautus" -> student.setStautus(convert(value, StudentModel.Stautus.class));
+            case "classId" -> student.setClassId(convert(value, Integer.class));
+            case "enrollmentYear" -> student.setEnrollmentYear(convert(value, Integer.class));
+            case "gpa" -> student.setGpa(convert(value, java.math.BigDecimal.class));
+            default -> throw new IllegalArgumentException("Field không hợp lệ hoặc không thể cập nhật: " + field);
+        }
+    }
+
+    private <T> T convert(Object value, Class<T> targetType) {
+        return value == null ? null : objectMapper.convertValue(value, targetType);
     }
 }

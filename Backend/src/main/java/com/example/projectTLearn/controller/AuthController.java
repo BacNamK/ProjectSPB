@@ -39,7 +39,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
-        UserModel user = authService.verifyUser(request.getStudentCode(), request.getPassWord());
+        UserModel user = authService.verifyUser(request.getCode(), request.getPassWord());
 
         TokenResponse tokenResponse = authService.endCodeJwtAndCreateSession(user.getId());
 
