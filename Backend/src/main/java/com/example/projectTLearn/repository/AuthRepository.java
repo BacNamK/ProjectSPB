@@ -16,8 +16,10 @@ public interface AuthRepository extends JpaRepository<UserModel, Long> {
     @Query("SELECT s FROM StudentModel s WHERE s.studentCode = :studentCode")
     StudentModel findByStudentCode(@Param("studentCode") String studentCode);
 
-    AdminModel findByCode(String code);
+    @Query("SELECT a FROM AdminModel a WHERE a.code = :code")
+    AdminModel findByCode(@Param("code") String code);
 
-    ModeratorModel findByModeratorCode(String code);
+    @Query("SELECT m FROM ModeratorModel m WHERE m.code = :code")
+    ModeratorModel findByModeratorCode(@Param("code") String code);
 
 }

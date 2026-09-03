@@ -1,8 +1,11 @@
 package com.example.projectTLearn.controller;
 
+import java.time.Duration;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +46,22 @@ public class AuthController {
 
         TokenResponse tokenResponse = authService.endCodeJwtAndCreateSession(user.getId());
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Login success",
-                "user", user.getName(),
-                "accessToken", tokenResponse.getAccessToken(),
-                "refreshToken", tokenResponse.getRefreshToken()));
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", tokenResponse.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/api/auth")
+                .maxAge(Duration.ofDays(60))
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of(
+                        "message", "Login Success",
+                        "accessToken", tokenResponse.getAccessToken(),
+                        "user", Map.of("name", user.getName(), "Code", request.getCode(),
+                                "role", user.getRole())));
+
     }
 
     @GetMapping("/refresh")
