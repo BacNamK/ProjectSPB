@@ -1,8 +1,8 @@
 import { User } from '../../users/models/user.model';
 
 export interface LoginRequest {
-  userCode: string;
-  password: string;
+  code: string;
+  passWord: string;
 }
 
 export interface LoginResponse {

@@ -2,11 +2,11 @@
   <form (ngSubmit)="login()">
     <div>
       <label for="user_code" class="text-red-400">User Code:</label>
-      <input type="text" id="user_code" name="userCode" [(ngModel)]="credentials.userCode" />
+      <input type="text" id="code" name="code" [(ngModel)]="credentials.code" />
     </div>
     <div>
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" [(ngModel)]="credentials.password" />
+      <input type="password" id="password" name="password" [(ngModel)]="credentials.passWord" />
     </div>
     <button type="submit">Login</button>
   </form>

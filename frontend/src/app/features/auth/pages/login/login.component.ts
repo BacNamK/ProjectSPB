@@ -15,7 +15,7 @@ export class LoginComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
 
-  credentials: LoginRequest = { userCode: '', password: '' };
+  credentials: LoginRequest = { code: '', passWord: '' };
 
   login(): void {
     this.authService.login(this.credentials).subscribe({
