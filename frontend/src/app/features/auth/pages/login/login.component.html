@@ -1,13 +1,34 @@
-<div class="w-full h-screen flex items-center justify-center bg-gray-100">
-  <form (ngSubmit)="login()">
-    <div>
-      <label for="user_code" class="text-red-400">User Code:</label>
-      <input type="text" id="code" name="code" [(ngModel)]="credentials.code" />
+<div class="w-full h-screen flex items-center justify-center text-[#17221d]">
+  <div class="relative isolate hidden md:block w-4/6 h-full overflow-hidden bg-[#dbe8dc] after:absolute after:inset-0 after:z-10 after:bg-linear-to-br after:from-white/30 after:via-transparent after:to-[#17221d]/10">
+    <div class="absolute z-0 top-[8%] left-[8%] size-[min(32vw,25rem)] rounded-full bg-[#e88870] opacity-90 mix-blend-multiply animate-bounce [animation-duration:9s]" aria-hidden="true"></div>
+    <div class="absolute z-0 right-[2%] bottom-[5%] size-[min(32vw,25rem)] rounded-full bg-[#6fb5a1] opacity-90 mix-blend-multiply animate-bounce [animation-duration:17s]" aria-hidden="true"></div>
+    <div class="absolute z-0 top-[37%] left-[38%] size-[min(23vw,18rem)] rounded-full bg-[#edc978] opacity-90 mix-blend-multiply animate-pulse [animation-duration:12s]" aria-hidden="true"></div>
+
+    <div class="relative z-20 flex h-full flex-col justify-center px-[12%] text-[#17221d] backdrop-blur-xl">
+      <p class="mb-6 font-sans text-[0.7rem] uppercase tracking-[0.2em]">TLearn / 2026</p>
+      <h1 class="m-0 max-w-2xl text-5xl font-normal leading-[0.92] md:text-[clamp(3rem,5.5vw,6.5rem)]"><em class="font-normal not-italic text-[#b44e3f]">Học kiến thức mới mỗi ngày.</em></h1>
+      <p class="mt-8 max-w-xs font-sans text-[0.95rem] leading-relaxed">Không gian học tập được tạo ra để những ý tưởng của bạn có chỗ phát triển.</p>
+      <div class="mt-12 size-11 rounded-full border border-current text-center font-serif text-3xl leading-9" aria-hidden="true">+</div>
     </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" [(ngModel)]="credentials.passWord" />
-    </div>
-    <button type="submit">Login</button>
+  </div>
+  <div class="w-2/6 relative max-md:w-full h-full content-center justify-items-center rounded-l-xl">
+    <h2 class="h-[10%] text-3xl font-semibold">Đăng nhập</h2>
+      <form (ngSubmit)="login()" class="w-full grid gap-y-4 justify-items-center font-sans max-md:px-8">
+        <div class="mb-4 grid gap-1">
+          <p class="m-0 text-sm uppercase tracking-[0.2em] text-black/50">Chào mừng trở lại</p>
+        
+        </div>
+        <div class="w-[60%] rounded-xl bg-gray-100 shadow max-md:w-full">
+          <input type="text" id="code" name="code" [(ngModel)]="credentials.code" placeholder="Mã người dùng" class="w-full rounded-xl bg-transparent p-2 outline-none" />
+        </div>
+        <div class="w-[60%] rounded-xl bg-gray-100 shadow max-md:w-full">
+          <input type="password" id="password" name="password" [(ngModel)]="credentials.passWord" placeholder="Mật khẩu" class="w-full rounded-xl bg-transparent p-2 outline-none" />
+        </div>
+        <div class="mt-4 flex w-[60%] justify-center max-md:w-full">
+          <button type="submit" class="h-full w-2/3 rounded-xl bg-green-100 p-2 shadow transition-colors hover:bg-green-200">Đăng nhập</button>
+        </div>
+        
   </form>
+  </div>
+
 </div>

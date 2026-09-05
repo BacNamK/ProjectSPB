@@ -8,7 +8,9 @@ export const ErrorInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+      const isRefreshRequest = request.url.endsWith('/auth/refreshToken');
+
+      if (error.status === 401 && !isRefreshRequest) {
         return authService.refreshToken().pipe(
           switchMap((response: { accessToken: string }) => {
             authService.setAccessToken(response.accessToken);
@@ -16,6 +18,7 @@ export const ErrorInterceptor: HttpInterceptorFn = (request, next) => {
               setHeaders: {
                 Authorization: `Bearer ${response.accessToken}`,
               },
+              withCredentials: true,
             });
             return next(clonedRequest);
           }),
