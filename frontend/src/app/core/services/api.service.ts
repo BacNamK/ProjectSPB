@@ -15,7 +15,7 @@ export class apiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api';
 
-  get<T>(path: string, options?: RequestOptions): Observable<T> {
+  get<T>(path: string, options?: RequestOptions, p0?: { withCredentials: boolean }): Observable<T> {
     return this.http.get<T>(this.url(path), options);
   }
 

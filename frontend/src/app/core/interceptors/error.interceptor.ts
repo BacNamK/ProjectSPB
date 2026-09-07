@@ -8,7 +8,7 @@ export const ErrorInterceptor: HttpInterceptorFn = (request, next) => {
 
   return next(request).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isRefreshRequest = request.url.endsWith('/auth/refreshToken');
+      const isRefreshRequest = request.url.endsWith('/auth/refresh');
 
       if (error.status === 401 && !isRefreshRequest) {
         return authService.refreshToken().pipe(

@@ -1,17 +1,22 @@
 package com.example.projectTLearn.service;
 
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import tools.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.projectTLearn.Type.PageResponse;
 import com.example.projectTLearn.model.StudentModel;
+import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.StudentRepository;
 
 @Service
@@ -19,10 +24,13 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ObjectMapper objectMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public StudentService(StudentRepository studentRepository, ObjectMapper objectMapper) {
+    public StudentService(StudentRepository studentRepository, ObjectMapper objectMapper,
+            PasswordEncoder passwordEncoder) {
         this.studentRepository = studentRepository;
         this.objectMapper = objectMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public PageResponse<StudentModel> getAllStudents(Integer page, Integer size) {
@@ -63,6 +71,38 @@ public class StudentService {
         }
 
         return studentRepository.searchByField(field, value);
+    }
+
+    public List<StudentModel> addStudents() {
+        return addStudents(100);
+    }
+
+    public List<StudentModel> addStudents(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("Số lượng sinh viên phải lớn hơn 0");
+        }
+
+        List<StudentModel> students = new ArrayList<>();
+        int currentYear = LocalDate.now().getYear();
+
+        for (int i = 1; i <= count; i++) {
+            StudentModel student = new StudentModel();
+            String code = String.format("SV%03d", i);
+            student.setStudentCode(code);
+            student.setPasswordHash(passwordEncoder.encode("123456"));
+            student.setName("Sinh viên " + i);
+            student.setFull_name("Sinh viên " + i);
+            student.setPhone("090000" + String.format("%04d", i));
+            student.setRole(UserModel.Role.STUDENT);
+            student.setStautus(UserModel.Stautus.ACTIVE);
+            student.setGender(i % 2 == 0 ? UserModel.Gender.FEMALE : UserModel.Gender.MALE);
+            student.setClassId(1);
+            student.setEnrollmentYear(currentYear);
+            student.setGpa(BigDecimal.valueOf(0.00));
+            students.add(student);
+        }
+
+        return studentRepository.saveAll(students);
     }
 
     public String deleteStudentByStudentCode(String code) {

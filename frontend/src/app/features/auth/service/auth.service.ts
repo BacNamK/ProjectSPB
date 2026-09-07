@@ -31,7 +31,7 @@ export class AuthService {
   refreshToken(): Observable<{ accessToken: string }> {
     // 1. Added the 'return' keyword
     return this.apiService
-      .post<{ accessToken: string }>('/auth/refreshToken', {}, { withCredentials: true })
+      .get<{ accessToken: string }>('/auth/refresh', {}, { withCredentials: true })
       .pipe(
         // 2. Replaced .subscribe() with .pipe(tap(...))
         tap({

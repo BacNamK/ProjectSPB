@@ -1,63 +1,45 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { ManageEntity } from './service/mana.service';
-import { Student } from './student/student.model';
+import { PageResponse, Student } from './student/student.model';
 
 @Component({
   selector: 'app-manage-student',
   standalone: true,
+  imports: [AsyncPipe, FormsModule],
   templateUrl: './student.componet.html',
 })
-export class student implements OnInit {
+export class student {
   private readonly manageEntity = inject(ManageEntity);
+  page = 1;
+  size = this.getPageSize();
+  students$ = this.getStudent();
 
-  students: Student[] = [];
-  currentPage = 1;
-  pageSize = 10;
-  totalPages = 0;
-  loading = false;
-  error = '';
-
-  ngOnInit(): void {
-    this.getStudents();
+  getStudent(): Observable<PageResponse<Student>> {
+    return this.manageEntity.getPageUser(this.page, this.size);
   }
 
-  getStudents(page = this.currentPage): void {
-    this.loading = true;
-    this.error = '';
-
-    this.manageEntity.getPageUser(page, this.pageSize).subscribe({
-      next: (response) => {
-        const pageResponse = Array.isArray(response)
-          ? {
-              data: response,
-              currentPage: page,
-              pageSize: this.pageSize,
-              totalPages: 1,
-            }
-          : response;
-
-        this.students = pageResponse.data ?? [];
-        this.currentPage = pageResponse.currentPage ?? page;
-        this.pageSize = pageResponse.pageSize ?? this.pageSize;
-        this.totalPages = pageResponse.totalPages || 1;
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        this.error = 'Không thể tải danh sách sinh viên.';
-      },
-    });
+  loadStudents(): void {
+    this.page = Math.max(1, Math.trunc(Number(this.page) || 1));
+    this.size = Math.min(50, Math.max(1, Math.trunc(Number(this.size) || 10)));
+    this.setPageSize();
+    this.students$ = this.getStudent();
   }
 
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.getStudents(this.currentPage - 1);
-    }
+  goToPage(page: number, totalPages: number): void {
+    this.page = Math.min(totalPages, Math.max(1, page));
+    this.loadStudents();
   }
 
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.getStudents(this.currentPage + 1);
-    }
+  getPageSize(): number {
+    const page = localStorage.getItem('pageSize');
+    if (!page) return 10;
+    return Math.min(50, Math.max(1, Math.trunc(Number(page) || 10)));
+  }
+
+  setPageSize(): void {
+    localStorage.setItem('pageSize', String(this.size));
   }
 }

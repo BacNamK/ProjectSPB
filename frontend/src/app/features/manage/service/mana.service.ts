@@ -9,9 +9,12 @@ import { PageResponse, Student } from '../student/student.model';
 export class ManageEntity {
   private readonly apiService = inject(apiService);
 
-  getPageUser(page = 1, size = 10): Observable<PageResponse<Student>> {
+  getPageUser(page: number = 0, size: number = 10): Observable<PageResponse<Student>> {
     return this.apiService.get<PageResponse<Student>>('/students', {
-      params: { page, size },
+      params: {
+        page,
+        size,
+      },
       withCredentials: true,
     });
   }

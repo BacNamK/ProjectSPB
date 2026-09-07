@@ -123,19 +123,14 @@ public class AuthService {
 
     public String refreshToken(String refreshToken) {
 
-        if (refreshToken.trim().isEmpty()) {
+        if (refreshToken == null || refreshToken.trim().isEmpty()) {
             throw new JwtException("TOKEN_EMPTY!");
         }
 
-        String authorization = refreshToken.trim();
-        if (!authorization.regionMatches(true, 0, "Bearer ", 0, 7)) {
-            throw new JwtException("TOKEN_INVALID-1!");
-        }
-
-        String token = authorization.substring(7).trim();
+        String token = refreshToken.trim();
 
         if (jwt.validateRefreshToken(token) == false) {
-            throw new JwtException("TOKEN_INVALID-2!");
+            throw new JwtException("TOKEN_INVALID!");
         }
 
         String userIdFromJwt = jwt.getUserFromJWT(token);
