@@ -3,8 +3,6 @@ package com.example.projectTLearn.service;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +21,18 @@ import com.example.projectTLearn.util.JwtTokenProvider;
 @Service
 public class AuthService {
 
-    @Autowired
-    private AuthRepository authRepository;
+    private final AuthRepository authRepository;
+    private final SessionRepository sessionRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwt;
 
-    @Autowired
-    private SessionRepository sessionRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenProvider jwt;
+    public AuthService(AuthRepository authRepository, SessionRepository sessionRepository,
+            PasswordEncoder passwordEncoder, JwtTokenProvider jwt) {
+        this.authRepository = authRepository;
+        this.sessionRepository = sessionRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwt = jwt;
+    }
 
     public UserModel verifyUser(String code, String password) {
 

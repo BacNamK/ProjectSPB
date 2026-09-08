@@ -3,7 +3,6 @@ package com.example.projectTLearn.controller;
 import java.time.Duration;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +25,11 @@ import com.example.projectTLearn.service.AuthService;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<?> addUser(@RequestBody RegisterRequest request) {
