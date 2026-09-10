@@ -11,10 +11,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "students")
-@PrimaryKeyJoinColumn(name = "user_id")
+@PrimaryKeyJoinColumn(name = "id")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class StudentModel extends UserModel {
 
@@ -43,6 +44,7 @@ public class StudentModel extends UserModel {
     // Tham chiếu đến bảng departments (department_id)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    @JsonIgnore
     private DepartmentsModel department; // Đặt tên thực thể tương ứng với bảng departments
 
     public DepartmentsModel getDepartment() {

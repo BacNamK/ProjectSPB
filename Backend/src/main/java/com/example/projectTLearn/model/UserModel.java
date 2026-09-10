@@ -1,7 +1,6 @@
 package com.example.projectTLearn.model;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -49,6 +48,17 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(nullable = false)
+    private String email;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonIgnore
@@ -117,10 +127,6 @@ public class UserModel {
     public enum Role {
         STUDENT, LETURER, MODERATOR, ADMIN;
 
-        public Optional<UserModel> stream() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'stream'");
-        }
     }
 
     @Enumerated(EnumType.STRING)

@@ -5,6 +5,7 @@ public class RegisterRequest {
     private String studentCode;
     private String passWord;
     private String name;
+    private String email;
     private String fullName;
     private String phone;
     private String gender;
@@ -44,6 +45,14 @@ public class RegisterRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFullName() {

@@ -1,8 +1,6 @@
 package com.example.projectTLearn.service;
 
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +58,8 @@ public class StudentService {
         return response;
     }
 
-    public List<StudentModel> searchByField(String url) {
-
-        String[] parts = url.split("=", 2);
-        String field = parts[0];
-        String value = URLDecoder.decode(parts[1], StandardCharsets.UTF_8).trim();
-
+    public List<StudentModel> searchByField(String field, String value) {
+        value = value.trim();
         if ("name".equalsIgnoreCase(field) || "full_name".equalsIgnoreCase(field)) {
             return studentRepository.searchByNameLike(value);
         }
@@ -91,6 +85,7 @@ public class StudentService {
             student.setStudentCode(code);
             student.setPasswordHash(passwordEncoder.encode("123456"));
             student.setName("Sinh viên " + i);
+            student.setEmail(code.toLowerCase() + "@example.com");
             student.setFull_name("Sinh viên " + i);
             student.setPhone("090000" + String.format("%04d", i));
             student.setRole(UserModel.Role.STUDENT);
@@ -139,6 +134,7 @@ public class StudentService {
 
         switch (normalizedField) {
             case "name" -> student.setName(convert(value, String.class));
+            case "email" -> student.setEmail(convert(value, String.class));
             case "full_name", "fullName" -> student.setFull_name(convert(value, String.class));
             case "gender" -> student.setGender(convert(value, StudentModel.Gender.class));
             case "phone" -> student.setPhone(convert(value, String.class));

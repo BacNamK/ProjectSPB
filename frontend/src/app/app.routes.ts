@@ -18,8 +18,21 @@ export const routes: Routes = [
         loadComponent: () => import('./ui/home/home.component').then((m) => m.HomePage),
       },
       {
-        path: 'manage/student',
-        loadComponent: () => import('./features/manage/student.componet').then((m) => m.student),
+        path: 'manage',
+        children: [
+          {
+            path: 'students',
+            loadComponent: () =>
+              import('./features/manage/students/students.component').then((m) => m.students),
+          },
+          {
+            path: 'students/:studentCode',
+            loadComponent: () =>
+              import('./features/manage/students/detail/studentDetail.component').then(
+                (m) => m.StudentDetail,
+              ),
+          },
+        ],
       },
     ],
   },

@@ -100,6 +100,10 @@ public class AuthService {
             throw new InvalidCredentialsException("PASSWORD_NOT_EMPTY");
         }
 
+        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+            throw new InvalidCredentialsException("EMAIL_NOT_EMPTY");
+        }
+
         if (authRepository.findByStudentCode(request.getStudentCode()) != null) {
             throw new InvalidCredentialsException("STUDENT_CODE_EXISTS");
         }
@@ -108,6 +112,7 @@ public class AuthService {
         student.setStudentCode(request.getStudentCode());
         student.setPasswordHash(passwordEncoder.encode(request.getPassWord()));
         student.setName(request.getName());
+        student.setEmail(request.getEmail());
         student.setFull_name(request.getFullName());
         student.setPhone(request.getPhone());
         student.setRole(UserModel.Role.STUDENT);

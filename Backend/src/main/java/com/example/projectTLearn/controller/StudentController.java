@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.projectTLearn.Type.PageResponse;
+import com.example.projectTLearn.Type.ApiResponse;
 import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.service.StudentService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
@@ -32,30 +31,36 @@ public class StudentController {
     }
 
     @GetMapping("")
-    public PageResponse<StudentModel> getAllStudents(
+    public ApiResponse<PageResponse<StudentModel>> getAllStudents(
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
-        return studentService.getAllStudents(page, size);
+        return new ApiResponse<>(true, "Lấy danh sách sinh viên thành công",
+            studentService.getAllStudents(page, size));
     }
 
     @GetMapping("/search")
-    public List<StudentModel> searchStudents(HttpServletRequest request) {
+    public ApiResponse<List<StudentModel>> searchStudents(@RequestParam Map<String, String> params) {
+        if (params.size() != 1) {
+            throw new IllegalArgumentException("Search phải có đúng một param");
+        }
 
-        String fullUrl = request.getRequestURL().toString();
-        String query = request.getQueryString();
-
-        return studentService.searchByField(query);
+        Map.Entry<String, String> searchParam = params.entrySet().iterator().next();
+        return new ApiResponse<>(true, "Tìm kiếm sinh viên thành công",
+            studentService.searchByField(searchParam.getKey(), searchParam.getValue()));
     }
 
     @PatchMapping("/{studentCode}")
     @PreAuthorize("hasRole('ADMIN')")
-    public String updateStudent(@PathVariable String studentCode, @RequestBody Map<String, Object> fields) {
-        return studentService.updateStudentByStudentCode(studentCode, fields);
+    public ApiResponse<String> updateStudent(@PathVariable String studentCode,
+            @RequestBody Map<String, Object> fields) {
+        return new ApiResponse<>(true, "Cập nhật sinh viên thành công",
+                studentService.updateStudentByStudentCode(studentCode, fields));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{studentCode}")
-    public String deleteStudent(@PathVariable String studentCode) {
-        return studentService.deleteStudentByStudentCode(studentCode);
+    public ApiResponse<String> deleteStudent(@PathVariable String studentCode) {
+        return new ApiResponse<>(true, "Xóa sinh viên thành công",
+                studentService.deleteStudentByStudentCode(studentCode));
     }
 }
