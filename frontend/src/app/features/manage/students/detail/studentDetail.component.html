@@ -1,53 +1,175 @@
 @if (student$ | async; as student) {
-	<div class="mx-auto mt-6 mb-10 w-[92%] max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_60px_-30px_rgba(15,23,42,0.35)]">
+  <div
+    class="mx-auto mt-6 mb-10 w-[92%] max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_60px_-30px_rgba(15,23,42,0.35)]"
+  >
+    <form class="p-6 sm:p-10" (submit)="$event.preventDefault(); save(student)">
+      <div class="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-semibold text-cyan-600">Thông tin cơ bản</p>
+          <h2 class="mt-1 text-xl font-bold text-slate-900">Chi tiết tài khoản</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button
+            type="button"
+            class="rounded-lg border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+            (click)="verifyAction()"
+          >
+            Xóa hồ sơ
+          </button>
+          @if (!isEditing) {
+            <button
+              type="button"
+              class="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-700"
+              (click)="startEditing(student)"
+            >
+              Chỉnh sửa
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              (click)="cancelEditing(student)"
+            >
+              Hủy
+            </button>
+            <button
+              type="submit"
+              class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="isSaving"
+            >
+              {{ isSaving ? 'Đang lưu...' : 'Lưu thay đổi' }}
+            </button>
+          }
+        </div>
+      </div>
 
+      <div class="grid gap-5 sm:grid-cols-2">
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Mã sinh viên</span
+          ><input
+            [value]="student.studentCode"
+            disabled
+            class="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-500 outline-none"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Họ và tên</span
+          ><input
+            name="full_name"
+            [(ngModel)]="student.full_name"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Giới tính</span
+          ><select
+            name="gender"
+            [(ngModel)]="student.gender"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 bg-white px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+          >
+            <option value="MALE">Nam</option>
+            <option value="FEMALE">Nữ</option>
+            <option value="OTHER">Khác</option>
+          </select></label
+        >
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Số điện thoại</span
+          ><input
+            name="phone"
+            [(ngModel)]="student.phone"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Lớp</span
+          ><input
+            name="classId"
+            type="number"
+            [(ngModel)]="student.classId"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Email</span
+          ><input
+            name="email"
+            type="email"
+            [(ngModel)]="student.email"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Năm nhập học</span
+          ><input
+            name="enrollmentYear"
+            type="number"
+            [(ngModel)]="student.enrollmentYear"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>GPA</span
+          ><input
+            name="gpa"
+            type="number"
+            step="0.01"
+            [(ngModel)]="student.gpa"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+        <label class="grid gap-2 text-sm font-semibold text-slate-600"
+          ><span>Trạng thái</span
+          ><input
+            name="stautus"
+            [(ngModel)]="student.stautus"
+            [disabled]="!isEditing"
+            class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"
+        /></label>
+      </div>
+      @if (errorMessage) {
+        <p
+          class="mt-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+        >
+          {{ errorMessage }}
+        </p>
+      }
+    </form>
 
-		<form class="p-6 sm:p-10" (submit)="$event.preventDefault(); save(student)">
-			<div class="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-				<div>
-					<p class="text-sm font-semibold text-cyan-600">Thông tin cơ bản</p>
-					<h2 class="mt-1 text-xl font-bold text-slate-900">Chi tiết tài khoản</h2>
-				</div>
-				<div class="flex flex-wrap gap-2">
-					<button type="button" class="rounded-lg border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50" (click)="verifyAction()">Xóa hồ sơ</button>
-					@if (!isEditing) {
-						<button type="button" class="rounded-lg bg-cyan-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-cyan-700" (click)="startEditing(student)">Chỉnh sửa</button>
-					} @else {
-						<button type="button" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50" (click)="cancelEditing(student)">Hủy</button>
-						<button type="submit" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50" [disabled]="isSaving">{{ isSaving ? 'Đang lưu...' : 'Lưu thay đổi' }}</button>
-					}
-				</div>
-			</div>
-
-			<div class="grid gap-5 sm:grid-cols-2">
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Mã sinh viên</span><input [value]="student.studentCode" disabled class="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-500 outline-none"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Họ và tên</span><input name="full_name" [(ngModel)]="student.full_name" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Giới tính</span><select name="gender" [(ngModel)]="student.gender" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 bg-white px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"><option value="MALE">Nam</option><option value="FEMALE">Nữ</option><option value="OTHER">Khác</option></select></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Số điện thoại</span><input name="phone" [(ngModel)]="student.phone" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Lớp</span><input name="classId" type="number" [(ngModel)]="student.classId" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-                <label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Email</span><input name="email" type="email" [(ngModel)]="student.email" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Năm nhập học</span><input name="enrollmentYear" type="number" [(ngModel)]="student.enrollmentYear" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>GPA</span><input name="gpa" type="number" step="0.01" [(ngModel)]="student.gpa" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-				<label class="grid gap-2 text-sm font-semibold text-slate-600"><span>Trạng thái</span><input name="stautus" [(ngModel)]="student.stautus" [disabled]="!isEditing" class="h-11 rounded-xl border border-slate-200 px-3 text-slate-900 outline-none transition focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-50"></label>
-			</div>
-			@if (errorMessage) { <p class="mt-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">{{ errorMessage }}</p> }
-		</form>
-
-		@if (isDelete) {
-			<div class="fixed inset-0 z-30 flex items-center justify-center bg-slate-950/40 px-4 backdrop-blur-sm">
-				<div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-					<div class="mb-6 flex items-start gap-4">
-						<div><h3 class="text-lg font-bold text-slate-900">Xóa hồ sơ sinh viên?</h3><p class="mt-1 text-sm leading-6 text-slate-500">Thao tác này không thể hoàn tác. Dữ liệu của <strong>{{ student.studentCode }}</strong> sẽ bị xóa.</p></div>
-					</div>
-					<div class="flex justify-end gap-3">
-						<button type="button" class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50" [disabled]="isDeleting" (click)="delete(student.studentCode)">{{ isDeleting ? 'Đang xóa...' : 'Xóa hồ sơ' }}</button>
-						<button type="button" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50" (click)="isDelete = false">Hủy</button>
-					
-					</div>
-				</div>
-			</div>
-		}
-	</div>
+    @if (isDelete) {
+      <div
+        class="fixed inset-0 z-30 flex items-center justify-center bg-slate-950/40 px-4 backdrop-blur-sm"
+      >
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+          <div class="mb-6 flex items-start gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Xóa hồ sơ sinh viên?</h3>
+              <p class="mt-1 text-sm leading-6 text-slate-500">
+                Thao tác này không thể hoàn tác. Dữ liệu của
+                <strong>{{ student.studentCode }}</strong> sẽ bị xóa.
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-end gap-3">
+            <button
+              type="button"
+              class="rounded-lg bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50"
+              [disabled]="isDeleting"
+              (click)="delete(student.studentCode)"
+            >
+              {{ isDeleting ? 'Đang xóa...' : 'Xóa hồ sơ' }}
+            </button>
+            <button
+              type="button"
+              class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+              (click)="isDelete = false"
+            >
+              Hủy
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
 } @else {
-	<p class="p-10 text-center text-slate-500">Không tìm thấy sinh viên.</p>
+  <p class="p-10 text-center text-slate-500">Không tìm thấy sinh viên.</p>
 }
