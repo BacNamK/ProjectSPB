@@ -1,5 +1,5 @@
 import { signal, computed, Injectable } from '@angular/core';
-import { User } from '../users/models/user.model';
+import { User } from '../../ui/users/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +70,9 @@ export class AuthStore {
 
   private get storage(): Storage | null {
     return typeof localStorage === 'undefined' ? null : localStorage;
+  }
+
+  public readUserP(): User | null {
+    return this.readUser();
   }
 }

@@ -3,6 +3,7 @@ import { apiService } from '../../../core/services/api.service';
 import { LoginRequest, LoginResponse } from '../models/auth.model';
 import { Observable, tap } from 'rxjs';
 import { AuthStore } from '../../stores/auth.stores';
+import { User } from '../../../ui/users/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -31,7 +32,7 @@ export class AuthService {
   refreshToken(): Observable<{ accessToken: string }> {
     // 1. Added the 'return' keyword
     return this.apiService
-      .get<{ accessToken: string }>('/auth/refresh', {}, { withCredentials: true })
+      .get<{ accessToken: string }>('/auth/refresh', { withCredentials: true })
       .pipe(
         // 2. Replaced .subscribe() with .pipe(tap(...))
         tap({
@@ -43,5 +44,16 @@ export class AuthService {
           },
         }),
       );
+  }
+
+  signOut() {
+    this.apiService.get('/fetch/logout', { withCredentials: true }).subscribe({
+      error: (error) => console.error('Đăng xuất thất bại', error),
+    });
+  }
+
+  authUI(): string {
+    const user: User | null = this.authStore.readUserP();
+    return user?.role ?? 'GUEST';
   }
 }

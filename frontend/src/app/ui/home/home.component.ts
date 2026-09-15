@@ -6,6 +6,4 @@ import { Router } from '@angular/router';
   standalone: true,
   templateUrl: './home.component.html',
 })
-export class HomePage {
-  constructor(private router: Router) {}
-}
+export class HomePage {}

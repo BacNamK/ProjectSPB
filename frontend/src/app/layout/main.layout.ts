@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { navbar } from './navbar/navbar';
+import { navbar } from './navbar/navbar.component';
 import { students } from '../features/manage/students/students.component';
 
 @Component({

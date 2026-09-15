@@ -34,6 +34,10 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'me',
+        loadComponent: () => import('./ui/users/pages/user.component').then((m) => m.user),
+      },
     ],
   },
 ];

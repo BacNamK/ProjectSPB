@@ -1,0 +1,64 @@
+@if (user$ | async; as user) {
+  <section class="min-h-full bg-slate-50 px-4 py-6 text-slate-900 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl">
+      <article class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+        <div class="grid gap-3 sm:grid-cols-2">
+          @if (user.full_name || user.name) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Họ và tên</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.full_name || user.name }}</p>
+            </div>
+          }
+          @if (user.classId != null) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Mã lớp</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.classId }}</p>
+            </div>
+          }
+          @if (user.email) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Email</p>
+              <p class="mt-1 break-all font-medium text-slate-800">{{ user.email }}</p>
+            </div>
+          }
+          @if (user.enrollmentYear != null) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Năm nhập học</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.enrollmentYear }}</p>
+            </div>
+          }
+          @if (user.gender) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Giới tính</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.gender }}</p>
+            </div>
+          }
+          @if (user.gpa != null) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">GPA</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.gpa }}</p>
+            </div>
+          }
+          @if (user.phone) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Số điện thoại</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.phone }}</p>
+            </div>
+          }
+          @if (user.id != null) {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">ID người dùng</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.id }}</p>
+            </div>
+          }
+          @if (user.role == 'ADMIN') {
+            <div class="rounded-lg border border-slate-100 p-3">
+              <p class="text-xs text-slate-500">Vai trò</p>
+              <p class="mt-1 font-medium text-slate-800">{{ user.role }}</p>
+            </div>
+          }
+        </div>
+      </article>
+    </div>
+  </section>
+}

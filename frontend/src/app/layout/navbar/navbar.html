@@ -2,28 +2,39 @@
   <div class="w-4/5 h-full flex">
     <div class="w-1/4 h-full text-center content-center text-3xl">QLSV</div>
     <div class="w-3/4 flex items-center h-full gap-x-10">
-      <div class="relative h-full group flex gap-2 items-center p-5 hover:bg-gray-200">
+      <div
+        [hidden]="isAdmin()"
+        class="relative h-full group min-w-35 flex gap-2 items-center p-5 hover:bg-gray-200"
+      >
         <span>Quản lý</span>
         <img class="size-5" src="/down-arrow.png" alt="" />
         <div
-          class="absolute left-0 top-full z-20 hidden min-w-30 group-hover:block shadow bg-white"
+          class="absolute left-0 top-full z-20 hidden min-w-35 group-hover:block shadow bg-white rounded-[5px] p-1 border border-black/20"
         >
           <a routerLink="/manage/students" class="block hover:bg-gray-100 p-2 cursor-pointer"
             >Sinh Viên</a
           >
-          <a class="block hover:bg-gray-100 p-2 cursor-pointer">Học Phần</a>
+          <a class="block hover:bg-gray-100 p-2 cursor-pointer">Học phần</a>
           <a class="block hover:bg-gray-100 p-2 cursor-pointer">Thời khóa biểu</a>
         </div>
       </div>
-      <span>Học Phần</span>
-      <span>Thời Khóa Biểu</span>
+      <span>Học phần</span>
+      <span>Thời khóa biểu</span>
     </div>
   </div>
-  <div class="w-1/5 items-center flex gap-10 justify-center">
+  <div class="w-1/5 items-center flex gap-8 justify-center">
     <img class="size-6" src="/notification.png" alt="Thông báo" />
-    <div class="flex items-center gap-4 p-2 rounded-xl">
-      <div class="bg-amber-200 rounded-full size-7"></div>
-      <img class="size-6" src="/menu.png" alt="" />
+    <div class="flex relative h-full items-center group p-2">
+      <div class="h-full content-center">
+        <img class="size-10 group-hover:bg-gray-200 p-2 rounded-xl" src="/menu.png" alt="" />
+        <div
+          class="absolute left-0 top-full min-w-30 z-20 bg-white shadow rounded-[5px] border border-black/20 group-hover:block hidden"
+        >
+          <a routerLink="/me" class="block p-1 m-1 rounded-[5px] hover:bg-gray-100">Hồ sơ</a>
+          <hr class="w-full opacity-20" />
+          <button (click)="signOut()" class="block p-2">Đăng xuất</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
