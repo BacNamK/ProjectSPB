@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.projectTLearn.Type.PageResponse;
-import com.example.projectTLearn.Type.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.service.StudentService;
+import com.example.projectTLearn.types.ApiResponse;
+import com.example.projectTLearn.types.PageResponse;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
 @RequestMapping("/students")
 public class StudentController {
@@ -35,7 +38,7 @@ public class StudentController {
             @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
         return new ApiResponse<>(true, "Lấy danh sách sinh viên thành công",
-            studentService.getAllStudents(page, size));
+                studentService.getAllStudents(page, size));
     }
 
     @GetMapping("/search")
@@ -46,7 +49,7 @@ public class StudentController {
 
         Map.Entry<String, String> searchParam = params.entrySet().iterator().next();
         return new ApiResponse<>(true, "Tìm kiếm sinh viên thành công",
-            studentService.searchByField(searchParam.getKey(), searchParam.getValue()));
+                studentService.searchByField(searchParam.getKey(), searchParam.getValue()));
     }
 
     @PatchMapping("/{studentCode}")

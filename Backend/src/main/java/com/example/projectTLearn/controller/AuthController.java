@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.projectTLearn.Type.LoginRequest;
-import com.example.projectTLearn.Type.RegisterRequest;
-import com.example.projectTLearn.Type.TokenResponse;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.service.AuthService;
+import com.example.projectTLearn.types.LoginRequest;
+import com.example.projectTLearn.types.RegisterRequest;
+import com.example.projectTLearn.types.TokenResponse;
 
 @CrossOrigin
 @RestController

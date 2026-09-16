@@ -5,13 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.projectTLearn.Type.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.FetchRepository;
 import com.example.projectTLearn.repository.SessionRepository;
+import com.example.projectTLearn.types.ApiResponse;
 
 @RequestMapping("/fetch")
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 public class FetchUserController {
 
     private final FetchRepository fetchRepository;

@@ -1,4 +1,4 @@
-package com.example.projectTLearn.Type;
+package com.example.projectTLearn.types;
 
 public class RegisterRequest {
 

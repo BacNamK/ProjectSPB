@@ -12,10 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.projectTLearn.Type.PageResponse;
 import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.StudentRepository;
+import com.example.projectTLearn.types.PageResponse;
 
 @Service
 public class StudentService {

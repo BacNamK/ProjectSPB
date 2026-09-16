@@ -6,8 +6,6 @@ import java.time.LocalDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.projectTLearn.Type.RegisterRequest;
-import com.example.projectTLearn.Type.TokenResponse;
 import com.example.projectTLearn.exception.InvalidCredentialsException;
 import com.example.projectTLearn.exception.JwtException;
 import com.example.projectTLearn.exception.UserNotFoundException;
@@ -16,6 +14,8 @@ import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.AuthRepository;
 import com.example.projectTLearn.repository.SessionRepository;
+import com.example.projectTLearn.types.RegisterRequest;
+import com.example.projectTLearn.types.TokenResponse;
 import com.example.projectTLearn.util.JwtTokenProvider;
 
 @Service
