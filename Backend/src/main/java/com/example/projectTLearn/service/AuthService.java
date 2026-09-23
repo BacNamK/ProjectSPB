@@ -1,8 +1,7 @@
 package com.example.projectTLearn.service;
 
-import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +9,9 @@ import com.example.projectTLearn.exception.InvalidCredentialsException;
 import com.example.projectTLearn.exception.JwtException;
 import com.example.projectTLearn.exception.UserNotFoundException;
 import com.example.projectTLearn.model.SessionModel;
-import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.AuthRepository;
 import com.example.projectTLearn.repository.SessionRepository;
-import com.example.projectTLearn.types.RegisterRequest;
 import com.example.projectTLearn.types.TokenResponse;
 import com.example.projectTLearn.util.JwtTokenProvider;
 
@@ -85,44 +82,6 @@ public class AuthService {
         sessionRepository.save(session);
 
         return new TokenResponse(accessToken, refreshToken);
-    }
-
-    public UserModel registerUser(RegisterRequest request) {
-        if (request == null) {
-            throw new InvalidCredentialsException("REQUEST_NOT_EMPTY");
-        }
-
-        if (request.getStudentCode() == null || request.getStudentCode().trim().isEmpty()) {
-            throw new InvalidCredentialsException("STUDENT_CODE_NOT_EMPTY!");
-        }
-
-        if (request.getPassWord() == null || request.getPassWord().trim().isEmpty()) {
-            throw new InvalidCredentialsException("PASSWORD_NOT_EMPTY");
-        }
-
-        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-            throw new InvalidCredentialsException("EMAIL_NOT_EMPTY");
-        }
-
-        if (authRepository.findByStudentCode(request.getStudentCode()) != null) {
-            throw new InvalidCredentialsException("STUDENT_CODE_EXISTS");
-        }
-
-        StudentModel student = new StudentModel();
-        student.setStudentCode(request.getStudentCode());
-        student.setPasswordHash(passwordEncoder.encode(request.getPassWord()));
-        student.setName(request.getName());
-        student.setEmail(request.getEmail());
-        student.setFull_name(request.getFullName());
-        student.setPhone(request.getPhone());
-        student.setRole(UserModel.Role.STUDENT);
-        student.setStautus(UserModel.Stautus.ACTIVE);
-        student.setGender(UserModel.Gender.valueOf(request.getGender().toUpperCase()));
-        student.setClassId(1);
-        student.setEnrollmentYear(LocalDate.now().getYear());
-        student.setGpa(BigDecimal.valueOf(0.00));
-
-        return authRepository.save(student);
     }
 
     public String refreshToken(String refreshToken) {

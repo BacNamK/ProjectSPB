@@ -22,8 +22,9 @@ import com.example.projectTLearn.security.filter.JwtAuthenticationFilter;
 @Configuration
 public class SecurityConfig {
 
+        @SuppressWarnings("null")
         @Bean
-        public SecurityFilterChain securityFilterChain(
+        SecurityFilterChain securityFilterChain(
                         HttpSecurity http,
                         JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
 

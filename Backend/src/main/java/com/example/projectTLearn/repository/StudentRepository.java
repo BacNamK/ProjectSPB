@@ -16,7 +16,6 @@ public interface StudentRepository extends JpaRepository<StudentModel, Long>, Jp
             "studentCode",
             "gender",
             "phone",
-            "role",
             "status",
             "classId",
             "department",
@@ -41,4 +40,7 @@ public interface StudentRepository extends JpaRepository<StudentModel, Long>, Jp
     }
 
     public StudentModel findStudentByStudentCode(String studentCode);
+
+    @Query("SELECT s FROM StudentModel s WHERE s.studentCode = :studentCode")
+    StudentModel findByStudentCode(@Param("studentCode") String studentCode);
 }

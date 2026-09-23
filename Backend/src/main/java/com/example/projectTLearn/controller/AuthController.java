@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.service.AuthService;
 import com.example.projectTLearn.types.LoginRequest;
-import com.example.projectTLearn.types.RegisterRequest;
 import com.example.projectTLearn.types.TokenResponse;
 
 @CrossOrigin
@@ -29,16 +28,6 @@ public class AuthController {
 
     public AuthController(AuthService authService) {
         this.authService = authService;
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<?> addUser(@RequestBody RegisterRequest request) {
-        UserModel user = authService.registerUser(request);
-
-        return ResponseEntity.ok(Map.of(
-                "message", "Add Success",
-                "user", user.getName(),
-                "studentCode", ((com.example.projectTLearn.model.StudentModel) user).getStudentCode()));
     }
 
     @PostMapping("/login")

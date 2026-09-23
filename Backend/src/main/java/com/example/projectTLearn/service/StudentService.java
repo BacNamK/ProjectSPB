@@ -2,7 +2,6 @@ package com.example.projectTLearn.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,10 +11,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.projectTLearn.exception.InvalidCredentialsException;
 import com.example.projectTLearn.model.StudentModel;
 import com.example.projectTLearn.model.UserModel;
 import com.example.projectTLearn.repository.StudentRepository;
 import com.example.projectTLearn.types.PageResponse;
+import com.example.projectTLearn.types.RegisterRequest;
 
 @Service
 public class StudentService {
@@ -67,37 +68,42 @@ public class StudentService {
         return studentRepository.searchByField(field, value);
     }
 
-    public List<StudentModel> addStudents() {
-        return addStudents(100);
-    }
-
-    public List<StudentModel> addStudents(int count) {
-        if (count <= 0) {
-            throw new IllegalArgumentException("Số lượng sinh viên phải lớn hơn 0");
+    public UserModel registerUser(RegisterRequest request) {
+        if (request == null) {
+            throw new InvalidCredentialsException("REQUEST_NOT_EMPTY");
         }
 
-        List<StudentModel> students = new ArrayList<>();
-        int currentYear = LocalDate.now().getYear();
-
-        for (int i = 1; i <= count; i++) {
-            StudentModel student = new StudentModel();
-            String code = String.format("SV%03d", i);
-            student.setStudentCode(code);
-            student.setPasswordHash(passwordEncoder.encode("123456"));
-            student.setName("Sinh viên " + i);
-            student.setEmail(code.toLowerCase() + "@example.com");
-            student.setFull_name("Sinh viên " + i);
-            student.setPhone("090000" + String.format("%04d", i));
-            student.setRole(UserModel.Role.STUDENT);
-            student.setStautus(UserModel.Stautus.ACTIVE);
-            student.setGender(i % 2 == 0 ? UserModel.Gender.FEMALE : UserModel.Gender.MALE);
-            student.setClassId(1);
-            student.setEnrollmentYear(currentYear);
-            student.setGpa(BigDecimal.valueOf(0.00));
-            students.add(student);
+        if (request.getStudentCode() == null || request.getStudentCode().trim().isEmpty()) {
+            throw new InvalidCredentialsException("STUDENT_CODE_NOT_EMPTY!");
         }
 
-        return studentRepository.saveAll(students);
+        if (request.getPassWord() == null || request.getPassWord().trim().isEmpty()) {
+            throw new InvalidCredentialsException("PASSWORD_NOT_EMPTY");
+        }
+
+        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+            throw new InvalidCredentialsException("EMAIL_NOT_EMPTY");
+        }
+
+        if (studentRepository.findByStudentCode(request.getStudentCode()) != null) {
+            throw new InvalidCredentialsException("STUDENT_CODE_EXISTS");
+        }
+
+        StudentModel student = new StudentModel();
+        student.setStudentCode(request.getStudentCode());
+        student.setPasswordHash(passwordEncoder.encode(request.getPassWord()));
+        student.setName(request.getName());
+        student.setEmail(request.getEmail());
+        student.setFull_name(request.getFullName());
+        student.setPhone(request.getPhone());
+        student.setRole(UserModel.Role.STUDENT);
+        student.setStautus(UserModel.Stautus.ACTIVE);
+        student.setGender(UserModel.Gender.valueOf(request.getGender().toUpperCase()));
+        student.setClassId(1);
+        student.setEnrollmentYear(LocalDate.now().getYear());
+        student.setGpa(BigDecimal.valueOf(0.00));
+
+        return studentRepository.save(student);
     }
 
     public String deleteStudentByStudentCode(String code) {
@@ -138,7 +144,6 @@ public class StudentService {
             case "full_name", "fullName" -> student.setFull_name(convert(value, String.class));
             case "gender" -> student.setGender(convert(value, StudentModel.Gender.class));
             case "phone" -> student.setPhone(convert(value, String.class));
-            case "role" -> student.setRole(convert(value, StudentModel.Role.class));
             case "status", "stautus" -> student.setStautus(convert(value, StudentModel.Stautus.class));
             case "classId" -> student.setClassId(convert(value, Integer.class));
             case "enrollmentYear" -> student.setEnrollmentYear(convert(value, Integer.class));

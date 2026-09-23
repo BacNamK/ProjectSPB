@@ -37,7 +37,7 @@ export class ManageEntity {
     data: CreateStudentRequest,
   ): Observable<{ message: string; user: string; studentCode: string }> {
     return this.apiService.post<{ message: string; user: string; studentCode: string }>(
-      '/auth/add',
+      '/students/add',
       data,
       { withCredentials: true },
     );
